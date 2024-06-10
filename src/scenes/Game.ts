@@ -21,7 +21,8 @@ export class Game extends Scene {
     this.player = this.physics.add.sprite(50, 550, "manwalk", 0);
     this.player.scale = 2.5;
 
-    this.player.setCollideWorldBounds(true);
+    this.physics.world.setBounds( 0, 384, 1024, 384 );
+    this.player.setCollideWorldBounds(true);    
 
     const config = {
       key: "manwalkAnimation",

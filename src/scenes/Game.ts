@@ -1,35 +1,67 @@
-import { Scene } from 'phaser';
+import { Scene } from "phaser";
 
-export class Game extends Scene
-{
-    camera: Phaser.Cameras.Scene2D.Camera;
-    background: Phaser.GameObjects.Image;
-    msg_text : Phaser.GameObjects.Text;
+export class Game extends Scene {
+  camera: Phaser.Cameras.Scene2D.Camera;
+  background: Phaser.GameObjects.Image;
+  msg_text: Phaser.GameObjects.Text;
+  cursors: Phaser.Types.Input.Keyboard.CursorKeys;
+  player: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody;
 
-    constructor ()
-    {
-        super('Game');
+  constructor() {
+    super("Game");
+  }
+
+  create() {
+
+    if (this.input.keyboard)
+      this.cursors = this.input.keyboard?.createCursorKeys();
+
+    this.background = this.add.image(512, 384, "gamebackground");
+
+    this.player = this.physics.add.sprite(50, 550, "manwalk", 0);
+    this.player.scale = 2.5;
+
+    this.player.setCollideWorldBounds(true);
+
+    const config = {
+      key: "manwalkAnimation",
+      frames: "manwalk",
+      frameRate: 10,
+      repeat: -1,
+    };
+    this.anims.create(config);
+  }
+  update() {
+    this.player.setVelocity(0);
+
+    if (this.cursors.left.isDown) {
+      this.player.setVelocityX(-300);
+      !this.player.anims.isPlaying &&
+        this.player.anims.play("manwalkAnimation");
+      this.player.flipX = true;
+    } else if (this.cursors.right.isDown) {
+      this.player.setVelocityX(300);
+      !this.player.anims.isPlaying &&
+        this.player.anims.play("manwalkAnimation");
+      this.player.flipX = false;
+    } 
+
+    if (this.cursors.up.isDown) {
+      this.player.setVelocityY(-300);
+      !this.player.anims.isPlaying &&
+        this.player.anims.play("manwalkAnimation");
+    } else if (this.cursors.down.isDown) {
+      this.player.setVelocityY(300);
+      !this.player.anims.isPlaying &&
+        this.player.anims.play("manwalkAnimation");
     }
 
-    create ()
-    {
-        this.camera = this.cameras.main;
-        this.camera.setBackgroundColor(0x00ff00);
-
-        this.background = this.add.image(512, 384, 'background');
-        this.background.setAlpha(0.5);
-
-        this.msg_text = this.add.text(512, 384, 'Make something fun!\nand share it with us:\nsupport@phaser.io', {
-            fontFamily: 'Arial Black', fontSize: 38, color: '#ffffff',
-            stroke: '#000000', strokeThickness: 8,
-            align: 'center'
-        });
-        this.msg_text.setOrigin(0.5);
-
-        this.input.once('pointerdown', () => {
-
-            this.scene.start('GameOver');
-
-        });
-    }
+    if (
+      this.cursors.down.isUp &&
+      this.cursors.up.isUp &&
+      this.cursors.left.isUp &&
+      this.cursors.right.isUp
+    )
+      this.player.anims.pause();
+  }
 }

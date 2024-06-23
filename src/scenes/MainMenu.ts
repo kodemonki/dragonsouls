@@ -4,6 +4,7 @@ export class MainMenu extends Scene {
   background: GameObjects.Image;
   logo: GameObjects.Image;
   title: GameObjects.Text;
+  description: GameObjects.Text;
 
   constructor() {
     super("MainMenu");
@@ -21,6 +22,17 @@ export class MainMenu extends Scene {
         color: "#ffffff",
         stroke: "#000000",
         strokeThickness: 8,
+        align: "center",
+      })
+      .setOrigin(0.5);
+    
+      this.description = this.add
+      .text(512, 550, "Arrow keys to move - space to punch", {
+        fontFamily: "Arial Black",
+        fontSize: 18,
+        color: "#ffffff",
+        stroke: "#000000",
+        strokeThickness: 4,
         align: "center",
       })
       .setOrigin(0.5);

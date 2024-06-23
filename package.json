@@ -16,7 +16,7 @@
     "bugs": {
         "url": "https://github.com/phaserjs/template-webpack/issues"
     },
-    "homepage": "https://github.com/phaserjs/template-webpack#readme",
+    "homepage": "https://kodemonki.github.io/dragonsouls/",
     "devDependencies": {
         "@babel/core": "^7.24.5",
         "@babel/preset-env": "^7.24.5",
@@ -24,6 +24,7 @@
         "clean-webpack-plugin": "^4.0.0",
         "copy-webpack-plugin": "^12.0.2",
         "file-loader": "^6.2.0",
+        "gh-pages": "^6.1.1",
         "html-webpack-plugin": "^5.6.0",
         "raw-loader": "^4.0.2",
         "terser-webpack-plugin": "^5.3.10",

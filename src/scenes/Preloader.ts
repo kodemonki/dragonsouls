@@ -24,9 +24,37 @@ export class Preloader extends Scene {
     this.load.setPath("assets");
     this.load.image("logo", "logo.png");
     this.load.image("gamebackground", "gamebg.png");
-    this.load.spritesheet("manwalk", "/sprites/man.png", {
-      frameWidth: 49,
-      frameHeight: 93,
+    this.load.audio("punch", ["audio/punch.mp3"]);
+    this.load.audio("punch-miss", ["audio/punch-miss.mp3"]);
+    this.load.spritesheet({
+      key: "manwalk",
+      url: "sprites/mansheet.png",
+      frameConfig: {
+        frameWidth: 80,
+        frameHeight: 93,
+        startFrame: 0,
+        endFrame: 5,
+      },
+    });
+    this.load.spritesheet({
+      key: "manpunch",
+      url: "sprites/mansheet.png",
+      frameConfig: {
+        frameWidth: 80,
+        frameHeight: 93,
+        startFrame: 5,
+        endFrame: 9,
+      },
+    });
+    this.load.spritesheet({
+      key: "manhit",
+      url: "sprites/mansheet.png",
+      frameConfig: {
+        frameWidth: 80,
+        frameHeight: 93,
+        startFrame: 9,
+        endFrame: 9,
+      },
     });
   }
 

@@ -3,6 +3,8 @@
     "version": "1.2.0",
     "main": "src/main.js",
     "scripts": {
+        "predeploy": "npm run build",
+        "deploy": "gh-pages -d build",
         "dev": "webpack-dev-server --config webpack/config.dev.js --open",
         "build": "webpack --config webpack/config.prod.js"
     },

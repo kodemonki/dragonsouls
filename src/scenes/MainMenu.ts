@@ -2,7 +2,6 @@ import { Scene, GameObjects } from "phaser";
 
 export class MainMenu extends Scene {
   background: GameObjects.Image;
-  logo: GameObjects.Image;
   title: GameObjects.Text;
   description: GameObjects.Text;
 
@@ -13,10 +12,19 @@ export class MainMenu extends Scene {
   create() {
     this.background = this.add.image(512, 384, "background");
 
-    this.logo = this.add.image(512, 300, "logo");
+    this.title = this.add
+    .text(512, 234, "Dragon Souls", {
+      fontFamily: "Arial Black",
+      fontSize: 44,
+      color: "#ffffff",
+      stroke: "#000000",
+      strokeThickness: 8,
+      align: "center",
+    })
+    .setOrigin(0.5);
 
     this.title = this.add
-      .text(512, 460, "Main Menu", {
+      .text(512, 384, "Main Menu", {
         fontFamily: "Arial Black",
         fontSize: 38,
         color: "#ffffff",
@@ -27,7 +35,7 @@ export class MainMenu extends Scene {
       .setOrigin(0.5);
     
       this.description = this.add
-      .text(512, 550, "Arrow keys to move - space to punch", {
+      .text(512, 484, "Arrow keys to move - space to punch B Block", {
         fontFamily: "Arial Black",
         fontSize: 18,
         color: "#ffffff",

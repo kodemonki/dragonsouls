@@ -118,7 +118,7 @@ export class Game extends Scene {
       constants.screenHeight / 2
     );
   }
-  onSecond() {
+  onTick() {
     if (this.player1.playerPower < 100 && !this.player1.isBlocking) {
       this.player1.playerPower += this.player1.regenPower;
       this.setValue(this.player1.playerPowerBar, this.player1.playerPower);
@@ -126,8 +126,8 @@ export class Game extends Scene {
   }
   createTimer() {
     this.time.addEvent({
-      delay: 500,
-      callback: this.onSecond,
+      delay: 250,
+      callback: this.onTick,
       callbackScope: this,
       loop: true,
     });

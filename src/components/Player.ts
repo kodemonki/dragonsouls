@@ -7,7 +7,7 @@ export class Player {
   playerHealthBar: Phaser.GameObjects.Graphics;
   playerPower: number = 100;
   punchPower: number = 30;
-  regenPower: number = 10;
+  regenPower: number = 7.5;
   playerPowerBar: Phaser.GameObjects.Graphics;
   isAttacking: boolean = false;
   isBlocking: boolean = false;

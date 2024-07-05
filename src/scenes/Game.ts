@@ -15,7 +15,6 @@ export class Game extends Scene {
   constructor() {
     super("Game");
   }
-
   makeBar(x: number, y: number, color: number) {
     let backgroundBar = this.add.graphics();
     backgroundBar.fillStyle(0xffffff, 1);
@@ -43,7 +42,6 @@ export class Game extends Scene {
     this.player1.onHit();
     this.enemy1.onTakeHit(this.player1.punchPower);
     this.setValue(this.enemy1.enemyHealthBar, this.enemy1.enemyHealth);
-
   }
   onPunch() {
     if (this.player1.playerPower >= this.player1.punchPower) {
@@ -53,7 +51,6 @@ export class Game extends Scene {
         this.enemy1.enemySprite.x,
         this.enemy1.enemySprite.y
       );
-
       if (distance < 100) {
         if (
           this.player1.playerSprite.x < this.enemy1.enemySprite.x &&
@@ -71,13 +68,13 @@ export class Game extends Scene {
       } else {
         this.sound.play("punch-miss");
       }
-
       this.player1.onPunch();
       this.setValue(this.player1.playerPowerBar, this.player1.playerPower);
     }
   }
   onBlock() {
     this.player1.isBlocking = true;
+    this.player1.playerSprite.anims.play(constants.manblockAnimation);
   }
   onUnblock() {
     this.player1.isBlocking = false;
@@ -90,7 +87,8 @@ export class Game extends Scene {
       this.input.keyboard.on("keydown", (event: { keyCode: number }) => {
         if (
           event.keyCode === Phaser.Input.Keyboard.KeyCodes.SPACE &&
-          this.player1.playerPower > 0 && !this.player1.isBlocking
+          this.player1.playerPower > 0 &&
+          !this.player1.isBlocking
         ) {
           this.onPunch();
         }
@@ -143,7 +141,6 @@ export class Game extends Scene {
   create() {
     this.player1 = new Player(this);
     this.enemy1 = new Enemy(this);
-
     this.createWorld();
     this.createPlayerBars();
     this.createEnemyBars();
@@ -159,8 +156,7 @@ export class Game extends Scene {
       this.enemy1.enemySprite.setDepth(1);
     }
   }
-  update() {
-    this.sortDepths();
+  calculateVelocities() {
     this.player1.playerSprite.setVelocity(0);
     if (!this.player1.isAttacking && !this.player1.isBlocking) {
       if (this.cursors.left.isDown) {
@@ -192,12 +188,15 @@ export class Game extends Scene {
       )
         this.player1.playerSprite.anims.pause();
     }
-    if (this.player1.isBlocking) {
-      this.player1.playerSprite.anims.play(constants.manblockAnimation);
-    }
-
-    if(this.enemy1.enemyHealth === 0 || this.player1.playerHealth === 0){
+  }
+  checkGameOver() {
+    if (this.enemy1.enemyHealth === 0 || this.player1.playerHealth === 0) {
       this.scene.start("GameOver");
     }
+  }
+  update() {
+    this.sortDepths();
+    this.calculateVelocities();
+    this.checkGameOver();
   }
 }

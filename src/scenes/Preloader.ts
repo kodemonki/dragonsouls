@@ -56,6 +56,16 @@ export class Preloader extends Scene {
         endFrame: 9,
       },
     });
+    this.load.spritesheet({
+      key: "manblock",
+      url: "sprites/mansheet.png",
+      frameConfig: {
+        frameWidth: 80,
+        frameHeight: 93,
+        startFrame: 6,
+        endFrame: 6,
+      },
+    });
   }
 
   create() {

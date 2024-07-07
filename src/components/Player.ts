@@ -1,5 +1,4 @@
 import { Scene } from "phaser";
-import constants from "../constants";
 
 export class Player {
   sprite: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody;
@@ -11,6 +10,7 @@ export class Player {
   powerBar: Phaser.GameObjects.Graphics;
   isAttacking: boolean = false;
   isBlocking: boolean = false;
+  isStunned: boolean = false;
   scene: Scene;
 
   constructor(scene: Scene) {
@@ -28,9 +28,17 @@ export class Player {
       this.sprite.setFrame(0);
     });
   }
+
   onPunch() {
     this.isAttacking = true;
-    this.sprite.anims.play(constants.manpunchAnimation);
     this.power -= this.punchPower;
+  }
+
+  onBlock(){
+    this.isBlocking = true;
+  }
+
+  onUnblock(){
+    this.isBlocking = false;
   }
 }

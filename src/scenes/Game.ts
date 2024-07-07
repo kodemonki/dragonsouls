@@ -38,12 +38,11 @@ export class Game extends Scene {
     this.player1.powerBar = this.makeBar(0, 50, 0xff9900);
     this.setValue(this.player1.powerBar, 100);
   }
-  onHit() {
-    this.sound.play("punch");
+  onPlayerHitEnemy() {    
     this.enemy1.onTakeHit(this.player1.punchPower);
     this.setValue(this.enemy1.healthBar, this.enemy1.health);
   }
-  onPunch() {
+  onPlayerPunch() {
     if (this.player1.power >= this.player1.punchPower) {
       let distance = Phaser.Math.Distance.Between(
         this.player1.sprite.x,
@@ -56,12 +55,12 @@ export class Game extends Scene {
           this.player1.sprite.x < this.enemy1.sprite.x &&
           this.player1.sprite.flipX === false
         ) {
-          this.onHit();
+          this.onPlayerHitEnemy();
         } else if (
           this.player1.sprite.x > this.enemy1.sprite.x &&
           this.player1.sprite.flipX === true
         ) {
-          this.onHit();
+          this.onPlayerHitEnemy();
         } else {
           this.sound.play("punch-miss");
         }
@@ -69,15 +68,17 @@ export class Game extends Scene {
         this.sound.play("punch-miss");
       }
       this.player1.onPunch();
+      this.player1.sprite.anims.play(constants.manpunchAnimation);
+
       this.setValue(this.player1.powerBar, this.player1.power);
     }
   }
-  onBlock() {
-    this.player1.isBlocking = true;
+  onPlayerBlock() {
+    this.player1.onBlock();
     this.player1.sprite.anims.play(constants.manblockAnimation);
   }
-  onUnblock() {
-    this.player1.isBlocking = false;
+  onPlayerUnblock() {
+    this.player1.onUnblock();
     this.player1.sprite.anims.play(constants.manwalkAnimation);
     this.player1.sprite.anims.pause();
   }
@@ -90,15 +91,15 @@ export class Game extends Scene {
           this.player1.power > 0 &&
           !this.player1.isBlocking
         ) {
-          this.onPunch();
+          this.onPlayerPunch();
         }
         if (event.keyCode === Phaser.Input.Keyboard.KeyCodes.B) {
-          this.onBlock();
+          this.onPlayerBlock();
         }
       });
       this.input.keyboard.on("keyup", (event: { keyCode: number }) => {
         if (event.keyCode === Phaser.Input.Keyboard.KeyCodes.B) {
-          this.onUnblock();
+          this.onPlayerUnblock();
         }
       });
     }

@@ -9,15 +9,16 @@ export class Enemy {
   punchPower: number = 30;
   isAttacking: boolean = false;
   isBlocking: boolean = false;
+  isStunned: boolean = false;
   scene: Scene;
   setValue: (bar: Phaser.GameObjects.Graphics, percentage: number) => void;
 
   constructor(scene: Scene, setValue: (bar: Phaser.GameObjects.Graphics, percentage: number) => void) {
     this.scene = scene;
     this.setValue = setValue;
-    this.createEnemy();
+    this.createSprite();
   }
-  createEnemy() {
+  createSprite() {
     this.sprite = this.scene.physics.add.sprite(850, 550, "manwalk", 0);
     this.sprite.scale = 2.5;
 
@@ -28,8 +29,9 @@ export class Enemy {
       this.isAttacking = false;
     });
   }
-  onTakeHit(power: number) {
+  onTakeHit(power: number) {    
     this.sprite.anims.play(constants.manhitAnimation);
+    this.scene.sound.play("punch");
     if (this.health <= power) {
       this.health = 0;
     } else {
@@ -95,7 +97,8 @@ export class Enemy {
         this.sprite.x,
         this.sprite.y
       );
-      if (distance < 75) {
+      console.log(distance);
+      if (distance <= 100) {
         this.onPunch(target);
       }
     }

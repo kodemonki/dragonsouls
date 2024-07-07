@@ -89,15 +89,13 @@ export class Enemy {
           this.sprite.anims.play(constants.manwalkAnimation);
       }
 
-      //if close punch
-
       let distance = Phaser.Math.Distance.Between(
         target.sprite.x,
         target.sprite.y,
         this.sprite.x,
         this.sprite.y
       );
-      if (distance < 100) {
+      if (distance < 75) {
         this.onPunch(target);
       }
     }

@@ -222,9 +222,12 @@ export class Game extends Scene {
     }
   }
   checkGameOver() {
-    if (this.enemy1.health === 0 || this.player1.health === 0) {
-      this.scene.start("GameOver");
+    if (this.enemy1.health === 0 ) {
+      this.scene.start("GameOverWin");
+    }else  if (this.player1.health === 0) {
+      this.scene.start("GameOverLose");
     }
+
   }
   update() {
     this.sortDepths();

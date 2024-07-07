@@ -171,7 +171,7 @@ export class Game extends Scene {
 
   create() {
     this.player1 = new Player(this);
-    this.enemy1 = new Enemy(this);
+    this.enemy1 = new Enemy(this, this.setValue);
     this.createAnimations();
     this.createWorld();
     this.createPlayerBars();

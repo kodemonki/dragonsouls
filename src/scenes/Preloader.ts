@@ -20,6 +20,8 @@ export class Preloader extends Scene {
   }
 
   preload() {
+    const frameHeight:number= 103;
+    const frameWidth:number= 80;
     //  Load the assets for the game - Replace with your own assets
     this.load.setPath("assets");
     this.load.image("gamebackground", "gamebg.png");
@@ -29,8 +31,8 @@ export class Preloader extends Scene {
       key: "manwalk",
       url: "sprites/mansheet.png",
       frameConfig: {
-        frameWidth: 80,
-        frameHeight: 93,
+        frameWidth: frameWidth,
+        frameHeight: frameHeight,
         startFrame: 0,
         endFrame: 5,
       },
@@ -39,8 +41,8 @@ export class Preloader extends Scene {
       key: "manpunch",
       url: "sprites/mansheet.png",
       frameConfig: {
-        frameWidth: 80,
-        frameHeight: 93,
+        frameWidth: frameWidth,
+        frameHeight: frameHeight,
         startFrame: 5,
         endFrame: 9,
       },
@@ -49,8 +51,8 @@ export class Preloader extends Scene {
       key: "manhit",
       url: "sprites/mansheet.png",
       frameConfig: {
-        frameWidth: 80,
-        frameHeight: 93,
+        frameWidth: frameWidth,
+        frameHeight: frameHeight,
         startFrame: 9,
         endFrame: 9,
       },
@@ -59,10 +61,20 @@ export class Preloader extends Scene {
       key: "manblock",
       url: "sprites/mansheet.png",
       frameConfig: {
-        frameWidth: 80,
-        frameHeight: 93,
+        frameWidth: frameWidth,
+        frameHeight: frameHeight,
         startFrame: 6,
         endFrame: 6,
+      },
+    });
+    this.load.spritesheet({
+      key: "mandie",
+      url: "sprites/mansheet.png",
+      frameConfig: {
+        frameWidth: frameWidth,
+        frameHeight: frameHeight,
+        startFrame: 10,
+        endFrame: 11,
       },
     });
   }

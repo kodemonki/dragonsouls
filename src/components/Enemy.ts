@@ -10,10 +10,14 @@ export class Enemy {
   isAttacking: boolean = false;
   isBlocking: boolean = false;
   isStunned: boolean = false;
+  endGame = false;
   scene: Scene;
   setValue: (bar: Phaser.GameObjects.Graphics, percentage: number) => void;
 
-  constructor(scene: Scene, setValue: (bar: Phaser.GameObjects.Graphics, percentage: number) => void) {
+  constructor(
+    scene: Scene,
+    setValue: (bar: Phaser.GameObjects.Graphics, percentage: number) => void
+  ) {
     this.scene = scene;
     this.setValue = setValue;
     this.createSprite();
@@ -23,43 +27,51 @@ export class Enemy {
     this.sprite.scale = 2.5;
 
     this.sprite.on("animationcomplete", () => {
-      this.sprite.anims.play(constants.manwalkAnimation);
-      this.sprite.setFrame(0);
-      this.sprite.anims.pause();
       this.isAttacking = false;
+      if (!this.endGame) {
+        this.sprite.anims.play(constants.manwalkAnimation);
+        this.sprite.setFrame(0);
+        this.sprite.anims.pause();
+      }
     });
   }
-  onTakeHit(power: number) {    
-    this.sprite.anims.play(constants.manhitAnimation);
-    this.scene.sound.play("punch");
-    if (this.health <= power) {
-      this.health = 0;
-    } else {
-      this.health -= power;
+  onTakeHit(power: number) {
+    if (!this.endGame) {
+      this.sprite.anims.play(constants.manhitAnimation);
+      this.scene.sound.play("punch");
+      if (this.health <= power) {
+        this.health = 0;
+      } else {
+        this.health -= power;
+      }
     }
   }
   onPunch(target: Player) {
-    this.isAttacking = true;
-    if (target.isBlocking) {
-      this.scene.sound.play("punch-miss");
-    } else {
-      this.onHit(target);
+    if (!this.endGame) {
+      this.isAttacking = true;
+      if (target.isBlocking) {
+        this.scene.sound.play("punch-miss");
+      } else {
+        this.onHit(target);
+      }
+      this.sprite.anims.play(constants.manpunchAnimation);
     }
-    this.sprite.anims.play(constants.manpunchAnimation);
   }
   onHit(target: Player) {
-    this.scene.sound.play("punch");
-    target.sprite.anims.play(constants.manhitAnimation);
-    if (target.health <= this.punchPower) {
-      target.health = 0;
-    } else {
-      target.health -= this.punchPower;
+    if (!this.endGame) {
+      this.scene.sound.play("punch");
+      target.sprite.anims.play(constants.manhitAnimation);
+      if (target.health <= this.punchPower) {
+        target.health = 0;
+      } else {
+        target.health -= this.punchPower;
+      }
+      this.setValue(target.healthBar, target.health);
     }
-    this.setValue(target.healthBar, target.health);
   }
   update(target: Player) {
     this.sprite.setVelocity(0);
-    if (!this.isAttacking && !this.isBlocking) {
+    if (!this.isAttacking && !this.isBlocking && !this.endGame) {
       const tolleranceX = 100;
       const tolleranceY = 10;
 
@@ -97,7 +109,6 @@ export class Enemy {
         this.sprite.x,
         this.sprite.y
       );
-      console.log(distance);
       if (distance <= 100) {
         this.onPunch(target);
       }

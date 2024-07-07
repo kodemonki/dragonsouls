@@ -11,6 +11,7 @@ export class Player {
   isAttacking: boolean = false;
   isBlocking: boolean = false;
   isStunned: boolean = false;
+  endGame: boolean = false;
   scene: Scene;
 
   constructor(scene: Scene) {
@@ -22,10 +23,12 @@ export class Player {
     this.sprite = this.scene.physics.add.sprite(50, 550, "manwalk", 0);
     this.sprite.scale = 2.5;
     this.sprite.setCollideWorldBounds(true);
-    
+
     this.sprite.on("animationcomplete", () => {
       this.isAttacking = false;
-      this.sprite.setFrame(0);
+      if (this.endGame === false) {
+        this.sprite.setFrame(0);
+      }
     });
   }
 
@@ -34,11 +37,11 @@ export class Player {
     this.power -= this.punchPower;
   }
 
-  onBlock(){
+  onBlock() {
     this.isBlocking = true;
   }
 
-  onUnblock(){
+  onUnblock() {
     this.isBlocking = false;
   }
 }

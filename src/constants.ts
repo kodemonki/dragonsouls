@@ -7,6 +7,7 @@ export default {
     manwalkAnimation:'manwalkAnimation',
     manblockAnimation:'manblockAnimation',
     manhitAnimation:'manhitAnimation',
-    manpunchAnimation:'manpunchAnimation'
+    manpunchAnimation:'manpunchAnimation',
+    mandieAnimation:'mandieAnimation'
 
 }

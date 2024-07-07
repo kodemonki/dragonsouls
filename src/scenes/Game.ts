@@ -11,6 +11,7 @@ export class Game extends Scene {
   player1: Player;
   enemy1: Enemy;
   timer: number = 0;
+  endGame = false;
 
   constructor() {
     super("Game");
@@ -38,7 +39,7 @@ export class Game extends Scene {
     this.player1.powerBar = this.makeBar(0, 50, 0xff9900);
     this.setValue(this.player1.powerBar, 100);
   }
-  onPlayerHitEnemy() {    
+  onPlayerHitEnemy() {
     this.enemy1.onTakeHit(this.player1.punchPower);
     this.setValue(this.enemy1.healthBar, this.enemy1.health);
   }
@@ -86,20 +87,28 @@ export class Game extends Scene {
     if (this.input.keyboard) {
       this.cursors = this.input.keyboard?.createCursorKeys();
       this.input.keyboard.on("keydown", (event: { keyCode: number }) => {
-        if (
-          event.keyCode === Phaser.Input.Keyboard.KeyCodes.SPACE &&
-          this.player1.power > 0 &&
-          !this.player1.isBlocking
-        ) {
-          this.onPlayerPunch();
-        }
-        if (event.keyCode === Phaser.Input.Keyboard.KeyCodes.B) {
-          this.onPlayerBlock();
+        if (this.endGame) {
+          //console.log("bloked");
+        } else {
+          if (
+            event.keyCode === Phaser.Input.Keyboard.KeyCodes.SPACE &&
+            this.player1.power > 0 &&
+            !this.player1.isBlocking
+          ) {
+            this.onPlayerPunch();
+          }
+          if (event.keyCode === Phaser.Input.Keyboard.KeyCodes.B) {
+            this.onPlayerBlock();
+          }
         }
       });
       this.input.keyboard.on("keyup", (event: { keyCode: number }) => {
-        if (event.keyCode === Phaser.Input.Keyboard.KeyCodes.B) {
-          this.onPlayerUnblock();
+        if (this.endGame) {
+          //console.log("bloked");
+        } else {
+          if (event.keyCode === Phaser.Input.Keyboard.KeyCodes.B) {
+            this.onPlayerUnblock();
+          }
         }
       });
     }
@@ -118,9 +127,13 @@ export class Game extends Scene {
     );
   }
   onTick() {
-    if (this.player1.power < 100 && !this.player1.isBlocking) {
-      this.player1.power += this.player1.regenPower;
-      this.setValue(this.player1.powerBar, this.player1.power);
+    if (this.endGame) {
+      //console.log("bloked");
+    } else {
+      if (this.player1.power < 100 && !this.player1.isBlocking) {
+        this.player1.power += this.player1.regenPower;
+        this.setValue(this.player1.powerBar, this.player1.power);
+      }
     }
   }
   createTimer() {
@@ -139,7 +152,7 @@ export class Game extends Scene {
     );
     this.setValue(this.enemy1.healthBar, 100);
   }
-  createAnimations(){
+  createAnimations() {
     const config1 = {
       key: constants.manwalkAnimation,
       frames: "manwalk",
@@ -168,6 +181,13 @@ export class Game extends Scene {
       repeat: 0,
     };
     this.anims.create(config4);
+    const config5 = {
+      key: constants.mandieAnimation,
+      frames: "mandie",
+      frameRate: 10,
+      repeat: 0,
+    };
+    this.anims.create(config5);
   }
 
   create() {
@@ -193,7 +213,7 @@ export class Game extends Scene {
     this.player1.sprite.setVelocity(0);
     if (!this.player1.isAttacking && !this.player1.isBlocking) {
       if (this.cursors.left.isDown) {
-        this.player1.sprite.setVelocityX(-1*constants.movemenVelocity);
+        this.player1.sprite.setVelocityX(-1 * constants.movemenVelocity);
         !this.player1.sprite.anims.isPlaying &&
           this.player1.sprite.anims.play(constants.manwalkAnimation);
         this.player1.sprite.flipX = true;
@@ -204,7 +224,7 @@ export class Game extends Scene {
         this.player1.sprite.flipX = false;
       }
       if (this.cursors.up.isDown) {
-        this.player1.sprite.setVelocityY(-1*constants.movemenVelocity);
+        this.player1.sprite.setVelocityY(-1 * constants.movemenVelocity);
         !this.player1.sprite.anims.isPlaying &&
           this.player1.sprite.anims.play(constants.manwalkAnimation);
       } else if (this.cursors.down.isDown) {
@@ -222,18 +242,50 @@ export class Game extends Scene {
         this.player1.sprite.anims.pause();
     }
   }
+  gotoWinScene() {
+    this.scene.start("GameOverWin");
+  }
+  gotoLoseScene() {
+    this.scene.start("GameOverLose");
+  }
   checkGameOver() {
-    if (this.enemy1.health === 0 ) {
-      this.scene.start("GameOverWin");
-    }else  if (this.player1.health === 0) {
-      this.scene.start("GameOverLose");
+    const dieTimer = 2000;
+    if (this.enemy1.health === 0) {
+      this.endGame = true;
+      this.player1.endGame = true;
+      this.enemy1.endGame = true;
+      this.enemy1.sprite.anims.play(constants.mandieAnimation);
+      this.player1.sprite.anims.play(constants.manwalkAnimation);
+      this.player1.sprite.anims.pause();
+      this.time.addEvent({
+        delay: dieTimer,
+        callback: this.gotoWinScene,
+        callbackScope: this,
+        loop: false,
+      });
+    } else if (this.player1.health === 0) {
+      this.endGame = true;
+      this.player1.endGame = true;
+      this.enemy1.endGame = true;
+      this.player1.sprite.anims.play(constants.mandieAnimation);
+      this.enemy1.sprite.anims.play(constants.manwalkAnimation);
+      this.enemy1.sprite.anims.pause();
+      this.time.addEvent({
+        delay: dieTimer,
+        callback: this.gotoLoseScene,
+        callbackScope: this,
+        loop: false,
+      });
     }
-
   }
   update() {
-    this.sortDepths();
-    this.calculateVelocities();
-    this.enemy1.update(this.player1);
-    this.checkGameOver();
+    if (this.endGame) {
+      //console.log("bloked");
+    } else {
+      this.sortDepths();
+      this.calculateVelocities();
+      this.enemy1.update(this.player1);
+      this.checkGameOver();
+    }
   }
 }

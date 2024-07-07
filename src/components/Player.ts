@@ -28,9 +28,6 @@ export class Player {
       this.sprite.setFrame(0);
     });
   }
-  onHit() {
-    this.scene.sound.play("punch");
-  }
   onPunch() {
     this.isAttacking = true;
     this.sprite.anims.play(constants.manpunchAnimation);

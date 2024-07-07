@@ -39,7 +39,7 @@ export class Game extends Scene {
     this.setValue(this.player1.powerBar, 100);
   }
   onHit() {
-    this.player1.onHit();
+    this.sound.play("punch");
     this.enemy1.onTakeHit(this.player1.punchPower);
     this.setValue(this.enemy1.healthBar, this.enemy1.health);
   }

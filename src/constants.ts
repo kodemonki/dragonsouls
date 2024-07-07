@@ -3,6 +3,7 @@ export default {
     screenHeight:768,
     barWidth:450,
     barHeight:50,
+    movemenVelocity:300,
     manwalkAnimation:'manwalkAnimation',
     manblockAnimation:'manblockAnimation',
     manhitAnimation:'manhitAnimation',

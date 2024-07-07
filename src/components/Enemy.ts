@@ -47,7 +47,7 @@ export class Enemy {
   }
   onHit(target: Player) {
     this.scene.sound.play("punch");
-    //this.sprite.anims.play(constants.manhitAnimation);
+    target.sprite.anims.play(constants.manhitAnimation);
     if (target.health <= this.punchPower) {
       target.health = 0;
     } else {

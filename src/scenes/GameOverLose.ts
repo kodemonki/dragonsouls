@@ -27,9 +27,7 @@ export class GameOverLose extends Scene
         this.gameover_text.setOrigin(0.5);
 
         this.input.once('pointerdown', () => {
-
             this.scene.start('MainMenu');
-
-        });
+        });        
     }
 }

@@ -189,8 +189,8 @@ export class Game extends Scene {
     };
     this.anims.create(config5);
   }
-
   create() {
+    console.log("create");
     this.player1 = new Player(this);
     this.enemy1 = new Enemy(this, this.setValue);
     this.createAnimations();
@@ -243,9 +243,11 @@ export class Game extends Scene {
     }
   }
   gotoWinScene() {
+    this.scene.remove();
     this.scene.start("GameOverWin");
   }
   gotoLoseScene() {
+    this.scene.remove();
     this.scene.start("GameOverLose");
   }
   checkGameOver() {

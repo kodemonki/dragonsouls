@@ -1,4 +1,5 @@
 import { Scene, GameObjects } from "phaser";
+import { Game } from "./Game";
 
 export class MainMenu extends Scene {
   background: GameObjects.Image;
@@ -46,7 +47,7 @@ export class MainMenu extends Scene {
       .setOrigin(0.5);
 
     this.input.once("pointerdown", () => {
-      this.scene.start("Game");
+      this.scene.add("Game", Game, true);
     });
   }
 }

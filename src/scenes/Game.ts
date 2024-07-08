@@ -146,47 +146,10 @@ export class Game extends Scene {
     );
     this.setValue(this.enemy1.healthBar, 100);
   }
-  createAnimations() {
-    const config1 = {
-      key: constants.manwalkAnimation,
-      frames: "manwalk",
-      frameRate: 10,
-      repeat: -1,
-    };
-    this.anims.create(config1);
-    const config2 = {
-      key: constants.manpunchAnimation,
-      frames: "manpunch",
-      frameRate: 20,
-      repeat: 0,
-    };
-    this.anims.create(config2);
-    const config3 = {
-      key: constants.manhitAnimation,
-      frames: "manhit",
-      frameRate: 1,
-      repeat: 0,
-    };
-    this.anims.create(config3);
-    const config4 = {
-      key: constants.manblockAnimation,
-      frames: "manblock",
-      frameRate: 1,
-      repeat: 0,
-    };
-    this.anims.create(config4);
-    const config5 = {
-      key: constants.mandieAnimation,
-      frames: "mandie",
-      frameRate: 10,
-      repeat: 0,
-    };
-    this.anims.create(config5);
-  }
+  
   create() {
     this.player1 = new Player(this);
     this.enemy1 = new Enemy(this, this.setValue);
-    this.createAnimations();
     this.createWorld();
     this.createPlayerBars();
     this.createEnemyBars();

@@ -1,4 +1,5 @@
 import { Scene } from "phaser";
+import constants from "../constants";
 
 export class Preloader extends Scene {
   constructor() {
@@ -22,6 +23,7 @@ export class Preloader extends Scene {
   preload() {
     const frameHeight:number= 103;
     const frameWidth:number= 80;
+    
     //  Load the assets for the game - Replace with your own assets
     this.load.setPath("assets");
     this.load.image("gamebackground", "gamebg.png");
@@ -76,14 +78,46 @@ export class Preloader extends Scene {
         startFrame: 10,
         endFrame: 11,
       },
-    });
+    });    
   }
 
   create() {
-    //  When all the assets have loaded, it's often worth creating global objects here that the rest of the game can use.
-    //  For example, you can define global animations here, so we can use them in other scenes.
+    const manwalkAnimation = {
+      key: constants.manwalkAnimation,
+      frames: "manwalk",
+      frameRate: 10,
+      repeat: -1,
+    };
+    this.anims.create(manwalkAnimation);
+    const manpunchAnimation = {
+      key: constants.manpunchAnimation,
+      frames: "manpunch",
+      frameRate: 20,
+      repeat: 0,
+    };
+    this.anims.create(manpunchAnimation);
+    const manhitAnimation = {
+      key: constants.manhitAnimation,
+      frames: "manhit",
+      frameRate: 1,
+      repeat: 0,
+    };
+    this.anims.create(manhitAnimation);
+    const manblockAnimation = {
+      key: constants.manblockAnimation,
+      frames: "manblock",
+      frameRate: 1,
+      repeat: 0,
+    };
+    this.anims.create(manblockAnimation);
+    const mandieAnimation = {
+      key: constants.mandieAnimation,
+      frames: "mandie",
+      frameRate: 10,
+      repeat: 0,
+    };
+    this.anims.create(mandieAnimation);
 
-    //  Move to the MainMenu. You could also swap this for a Scene Transition, such as a camera fade.
     this.scene.start("MainMenu");
   }
 }

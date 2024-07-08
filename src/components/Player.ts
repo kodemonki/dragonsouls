@@ -26,7 +26,7 @@ export class Player {
 
     this.sprite.on("animationcomplete", () => {
       this.isAttacking = false;
-      if (this.endGame === false) {
+      if (!this.endGame) {
         this.sprite.setFrame(0);
       }
     });

@@ -87,9 +87,7 @@ export class Game extends Scene {
     if (this.input.keyboard) {
       this.cursors = this.input.keyboard?.createCursorKeys();
       this.input.keyboard.on("keydown", (event: { keyCode: number }) => {
-        if (this.endGame) {
-          //console.log("bloked");
-        } else {
+        if (!this.endGame) {
           if (
             event.keyCode === Phaser.Input.Keyboard.KeyCodes.SPACE &&
             this.player1.power > 0 &&
@@ -103,9 +101,7 @@ export class Game extends Scene {
         }
       });
       this.input.keyboard.on("keyup", (event: { keyCode: number }) => {
-        if (this.endGame) {
-          //console.log("bloked");
-        } else {
+        if (!this.endGame) {         
           if (event.keyCode === Phaser.Input.Keyboard.KeyCodes.B) {
             this.onPlayerUnblock();
           }
@@ -127,9 +123,7 @@ export class Game extends Scene {
     );
   }
   onTick() {
-    if (this.endGame) {
-      //console.log("bloked");
-    } else {
+    if (!this.endGame) {     
       if (this.player1.power < 100 && !this.player1.isBlocking) {
         this.player1.power += this.player1.regenPower;
         this.setValue(this.player1.powerBar, this.player1.power);
@@ -190,7 +184,6 @@ export class Game extends Scene {
     this.anims.create(config5);
   }
   create() {
-    console.log("create");
     this.player1 = new Player(this);
     this.enemy1 = new Enemy(this, this.setValue);
     this.createAnimations();
@@ -281,9 +274,7 @@ export class Game extends Scene {
     }
   }
   update() {
-    if (this.endGame) {
-      //console.log("bloked");
-    } else {
+    if (!this.endGame) {      
       this.sortDepths();
       this.calculateVelocities();
       this.enemy1.update(this.player1);

@@ -161,7 +161,7 @@ export class Game extends Scene {
     this.createInputs();
     this.createTimer();
     //debug
-    this.sound.mute = true;
+    //this.sound.mute = true;
   }
   sortDepths() {
     if (this.player1.sprite.y < this.enemy1.sprite.y) {

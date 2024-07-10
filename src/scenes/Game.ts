@@ -101,7 +101,7 @@ export class Game extends Scene {
         }
       });
       this.input.keyboard.on("keyup", (event: { keyCode: number }) => {
-        if (!this.endGame) {         
+        if (!this.endGame) {
           if (event.keyCode === Phaser.Input.Keyboard.KeyCodes.B) {
             this.onPlayerUnblock();
           }
@@ -123,10 +123,14 @@ export class Game extends Scene {
     );
   }
   onTick() {
-    if (!this.endGame) {     
+    if (!this.endGame) {
       if (this.player1.power < 100 && !this.player1.isBlocking) {
         this.player1.power += this.player1.regenPower;
         this.setValue(this.player1.powerBar, this.player1.power);
+      }
+      if (this.enemy1.power < 100 && !this.enemy1.isBlocking) {
+        this.enemy1.power += this.enemy1.regenPower;
+        this.setValue(this.enemy1.powerBar, this.enemy1.power);
       }
     }
   }
@@ -145,8 +149,9 @@ export class Game extends Scene {
       0x009933
     );
     this.setValue(this.enemy1.healthBar, 100);
+    this.enemy1.powerBar = this.makeBar(constants.screenWidth - constants.barWidth, 50, 0xff9900);
+    this.setValue(this.enemy1.powerBar, 100);
   }
-  
   create() {
     this.player1 = new Player(this);
     this.enemy1 = new Enemy(this, this.setValue);
@@ -155,6 +160,8 @@ export class Game extends Scene {
     this.createEnemyBars();
     this.createInputs();
     this.createTimer();
+    //debug
+    this.sound.mute = true;
   }
   sortDepths() {
     if (this.player1.sprite.y < this.enemy1.sprite.y) {
@@ -170,22 +177,20 @@ export class Game extends Scene {
     if (!this.player1.isAttacking && !this.player1.isBlocking) {
       if (this.cursors.left.isDown) {
         this.player1.sprite.setVelocityX(-1 * constants.movemenVelocity);
-        !this.player1.sprite.anims.isPlaying &&
+        !this.player1.sprite.anims.isPlaying && !this.endGame &&
           this.player1.sprite.anims.play(constants.manwalkAnimation);
-        this.player1.sprite.flipX = true;
       } else if (this.cursors.right.isDown) {
         this.player1.sprite.setVelocityX(constants.movemenVelocity);
-        !this.player1.sprite.anims.isPlaying &&
+        !this.player1.sprite.anims.isPlaying && !this.endGame &&
           this.player1.sprite.anims.play(constants.manwalkAnimation);
-        this.player1.sprite.flipX = false;
       }
       if (this.cursors.up.isDown) {
         this.player1.sprite.setVelocityY(-1 * constants.movemenVelocity);
-        !this.player1.sprite.anims.isPlaying &&
+        !this.player1.sprite.anims.isPlaying && !this.endGame &&
           this.player1.sprite.anims.play(constants.manwalkAnimation);
       } else if (this.cursors.down.isDown) {
         this.player1.sprite.setVelocityY(constants.movemenVelocity);
-        !this.player1.sprite.anims.isPlaying &&
+        !this.player1.sprite.anims.isPlaying && !this.endGame &&
           this.player1.sprite.anims.play(constants.manwalkAnimation);
       }
       if (
@@ -207,8 +212,10 @@ export class Game extends Scene {
     this.scene.start("GameOverLose");
   }
   checkGameOver() {
-    const dieTimer = 2000;
+    const dieTimer = 1000;
     if (this.enemy1.health === 0) {
+      this.player1.sprite.setVelocity(0);
+      this.enemy1.sprite.setVelocity(0);
       this.endGame = true;
       this.player1.endGame = true;
       this.enemy1.endGame = true;
@@ -222,6 +229,8 @@ export class Game extends Scene {
         loop: false,
       });
     } else if (this.player1.health === 0) {
+      this.player1.sprite.setVelocity(0);
+      this.enemy1.sprite.setVelocity(0);
       this.endGame = true;
       this.player1.endGame = true;
       this.enemy1.endGame = true;
@@ -236,8 +245,18 @@ export class Game extends Scene {
       });
     }
   }
+  setDirection() {
+    if (this.player1.sprite.x <= this.enemy1.sprite.x) {
+      this.player1.sprite.flipX = false;
+      this.enemy1.sprite.flipX = true;
+    } else {
+      this.player1.sprite.flipX = true;
+      this.enemy1.sprite.flipX = false;
+    }
+  }
   update() {
-    if (!this.endGame) {      
+    if (!this.endGame) {
+      this.setDirection();
       this.sortDepths();
       this.calculateVelocities();
       this.enemy1.update(this.player1);

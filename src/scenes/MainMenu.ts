@@ -14,15 +14,15 @@ export class MainMenu extends Scene {
     this.background = this.add.image(512, 384, "background");
 
     this.title = this.add
-    .text(512, 234, "Dragon Souls", {
-      fontFamily: "Arial Black",
-      fontSize: 44,
-      color: "#ffffff",
-      stroke: "#000000",
-      strokeThickness: 8,
-      align: "center",
-    })
-    .setOrigin(0.5);
+      .text(512, 234, "Dragon Souls", {
+        fontFamily: "Arial Black",
+        fontSize: 44,
+        color: "#ffffff",
+        stroke: "#000000",
+        strokeThickness: 8,
+        align: "center",
+      })
+      .setOrigin(0.5);
 
     this.title = this.add
       .text(512, 384, "Main Menu", {
@@ -34,8 +34,8 @@ export class MainMenu extends Scene {
         align: "center",
       })
       .setOrigin(0.5);
-    
-      this.description = this.add
+
+    this.description = this.add
       .text(512, 484, "Arrow keys to move - space to punch B Block", {
         fontFamily: "Arial Black",
         fontSize: 18,
@@ -46,8 +46,10 @@ export class MainMenu extends Scene {
       })
       .setOrigin(0.5);
 
-    this.input.once("pointerdown", () => {
-      this.scene.add("Game", Game, true);
-    });
+    if (this.input.keyboard) {
+      this.input.keyboard.once('keydown', ()=>{
+        this.scene.add("Game", Game, true);
+      })     
+    }
   }
 }

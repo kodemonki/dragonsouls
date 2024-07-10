@@ -6,7 +6,10 @@ export class Enemy {
   health: number = 100;
   sprite: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody;
   healthBar: Phaser.GameObjects.Graphics;
+  power: number = 100;
   punchPower: number = 30;
+  regenPower: number = 7.5;
+  powerBar: Phaser.GameObjects.Graphics;
   isAttacking: boolean = false;
   isBlocking: boolean = false;
   isStunned: boolean = false;
@@ -47,8 +50,12 @@ export class Enemy {
     }
   }
   onPunch(target: Player) {
-    if (!this.endGame) {
+    if (!this.endGame && this.power >= this.punchPower) {
       this.isAttacking = true;
+      this.power -= this.punchPower;
+      if (this.power < 0) {
+        this.power = 0;
+      }
       if (target.isBlocking) {
         this.scene.sound.play("punch-miss");
       } else {
@@ -78,14 +85,14 @@ export class Enemy {
       if (target.sprite.x < this.sprite.x - tolleranceX) {
         //move left
         this.sprite.setVelocityX(-0.5 * constants.movemenVelocity);
-        this.sprite.flipX = true;
         !this.sprite.anims.isPlaying &&
+          !this.endGame &&
           this.sprite.anims.play(constants.manwalkAnimation);
       } else if (target.sprite.x > this.sprite.x + tolleranceX) {
         //move right
         this.sprite.setVelocityX(0.5 * constants.movemenVelocity);
-        this.sprite.flipX = false;
         !this.sprite.anims.isPlaying &&
+          !this.endGame &&
           this.sprite.anims.play(constants.manwalkAnimation);
       } else {
         this.sprite.anims.pause();
@@ -95,11 +102,13 @@ export class Enemy {
         //move up
         this.sprite.setVelocityY(-0.5 * constants.movemenVelocity);
         !this.sprite.anims.isPlaying &&
+          !this.endGame &&
           this.sprite.anims.play(constants.manwalkAnimation);
       } else if (target.sprite.y > this.sprite.y + tolleranceY) {
         //move down
         this.sprite.setVelocityY(0.5 * constants.movemenVelocity);
         !this.sprite.anims.isPlaying &&
+          !this.endGame &&
           this.sprite.anims.play(constants.manwalkAnimation);
       }
 
